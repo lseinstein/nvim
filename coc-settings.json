@@ -1,0 +1,41 @@
+{
+    "coc.preferences.extensionUpdateCheck": "weekly",
+    "codeLens.enable": true,
+    "coc.preferences.formatOnSaveFiletypes": [
+        "cpp",
+        "json",
+        "c",
+        "h",
+        "vim"
+    ],
+    "translator.toLang": {
+        "type": "string",
+        "description": "Target language type"
+    },
+    "translator.engines": {
+        "type": "array",
+        "default": [
+            "bing",
+            "google",
+            "youdao",
+            "haici"
+        ]
+    },
+    "translator.enableBorder": {
+        "type": "boolean",
+        "default": true
+    },
+    "translator.enableHover": {
+        "type": "boolean",
+        "default": false,
+        "description": "Translate when mouse hover"
+    },
+    "translator.window.maxWidth": {
+        "type": "number",
+        "default": 999
+    },
+    "translator.window.maxHeight": {
+        "type": "number",
+        "default": 999
+    }
+}
