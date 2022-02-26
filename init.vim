@@ -64,6 +64,7 @@ set ignorecase
 set smartcase
 set shortmess+=c
 set inccommand=split
+
 set ttyfast "should make scrolling faster
 set lazyredraw "same as above
 set visualbell
@@ -83,6 +84,9 @@ let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 
+" 复制到windows剪贴板 " How to "copy to clipboard" in vim of Bash on Windows? 
+autocmd TextYankPost * if v:event.operator ==# 'y' | call system('/mnt/c/Windows/System32/clip.exe', @0) | endif
+
 " Fcitx
 let s:fcitx_cmd = executable("fcitx5-remote") ? "fcitx5-remote" : "fcitx-remote"
 
@@ -96,7 +100,6 @@ autocmd InsertEnter * if exists('b:fcitx') && b:fcitx == 2 | call system(s:fcitx
 let g:neoterm_autoscroll = 1
 autocmd TermOpen term://* startinsert
 "tnoremap <C-N> <C-\><C-N>:q<CR>
-
 
 " ===
 " === Basic Mappings
