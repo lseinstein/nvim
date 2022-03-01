@@ -1,4 +1,4 @@
-# 我的NeoVim配置 (A NeoVim Config for Colemak Users)
+# 我的NeoVim配置 (A NeoVim Config)
 
 Please **DO NOT** just copy this config without really looking at it! Please, at least, read this README file!
 
