@@ -131,6 +131,14 @@ noremap <C-y> 5<C-y>
 "inoremap <C-k> <Esc>5<C-y>a
 " Copy to system clipboard
 "vnoremap Y :w !xclip -i -sel c<CR>
+
+"在插入模式下移动光标 
+inoremap <C-h> <Left> 
+inoremap <C-j> <Down> 
+inoremap <C-k> <Up> 
+inoremap <C-l> <Right>
+
+
 nnoremap <LEADER>p "+p
 nnoremap <LEADER>P "+P
 vnoremap <LEADER>y "+y
