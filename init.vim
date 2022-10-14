@@ -128,10 +128,6 @@ noremap H 0
 noremap L $
 noremap <C-e> 5<C-e>
 noremap <C-y> 5<C-y>
-"inoremap <C-j> <Esc>5<C-e>a
-"inoremap <C-k> <Esc>5<C-y>a
-" Copy to system clipboard
-"vnoremap Y :w !xclip -i -sel c<CR>
 
 "在插入模式下移动光标 
 inoremap <C-h> <Left>
@@ -140,7 +136,10 @@ inoremap <C-k> <Up>
 inoremap <C-l> <Right>
 inoremap <C-o> <Delete>
 
-
+"inoremap <C-j> <Esc>5<C-e>a
+"inoremap <C-k> <Esc>5<C-y>a
+" Copy to system clipboard
+"vnoremap Y :w !xclip -i -sel c<CR>
 nnoremap <LEADER>p "+p
 nnoremap <LEADER>P "+P
 vnoremap <LEADER>y "+y
@@ -160,8 +159,8 @@ nnoremap > >>
 
 " Search
 map <LEADER><CR> :nohlsearch<CR>
-noremap . nzz
-noremap , Nzz
+"noremap . nzz
+"noremap , Nzz
 
 " Adjacent duplicate words
 map <LEADER>dw /\(\<\w\+\>\)\_s*\1
@@ -239,8 +238,11 @@ map <LEADER><LEADER> <Esc>/<++><CR>:nohlsearch<CR>c4i
 
 " Spelling Check with <space>sc
 "map <LEADER>sc :set spell!<CR>
-noremap <C-s> ea<C-x>s
-inoremap <C-s> <Esc>ea<C-x>s
+"noremap <C-s> ea<C-x>s
+"inoremap <C-s> <Esc>ea<C-x>s
+setlocal spell
+set spelllang=nl,en_gb
+inoremap <C-s> <c-g>u<Esc>[s1z=`]a<c-g>u
 
 " Press ` to change case (instead of ~)
 "map ` ~
@@ -304,6 +306,7 @@ call plug#begin('~/.config/nvim/plugged')
 "Plug 'bling/vim-bufferline'
 "Plug 'liuchengxu/space-vim-theme'
 Plug 'tomasr/molokai'
+Plug 'dylanaraps/wal'
 
 "Plug 'ajmwagar/vim-deus'
 
@@ -453,8 +456,14 @@ Plug 'ron89/thesaurus_query.vim'
 " Bookmarks
 Plug 'kshenoy/vim-signature'
 
+" vimtex
+Plug 'lervag/vimtex'
+
+" vim-snippets
+Plug 'honza/vim-snippets'
+
 " Other useful utilities
-Plug 'tpope/vim-surround' " type ysks' to wrap the word in Vis Mode with '' or type cs'` in Nor Mode to change 'word' to `word`
+Plug 'tpope/vim-surround' " type ysiw' to wrap the word in Vis Mode with '' or type cs'` in Nor Mode to change 'word' to `word` or type ds' in Nor Mode to change 'word' to word.
 Plug 'godlygeek/tabular' " type ;Tabularize /= to align the =
 Plug 'gcmt/wildfire.vim' " in Visual mode, type i' to select all text in '', or type i) i] i} ip
 Plug 'scrooloose/nerdcommenter' " in <space>cc to comment a line
@@ -464,12 +473,14 @@ Plug 'tmhedberg/SimpylFold'
 Plug 'AndrewRadev/switch.vim' " gs to switch
 Plug 'ryanoasis/vim-devicons' " icons
 Plug 'mg979/vim-visual-multi'
+"Plug 'brglng/vim-im-select' " input method management
 
 " support enchaned motion experience
 Plug 'easymotion/vim-easymotion'
 let g:EasyMotion_do_mapping = 0
 let g:EasyMotion_smartcase = 1
 map <silent> r <Plug>(easymotion-overwin-f2)
+" tpye r ande then type two characters to locate the place you want to go to.
 
 "Plug 'luochen1990/rainbow'
 "let g:rainbow_active = 1
@@ -497,6 +508,8 @@ source ~/.config/nvim/_machine_specific.vim
 " ===
 set termguicolors     " enable true colors support
 color molokai
+"colorscheme wal
+
 "color deus
 "let g:space_vim_transp_bg = 1
 "set background=dark
@@ -572,7 +585,7 @@ color molokai
 
 "let g:coc_node_path = '/usr/bin/node'
 silent! au BufEnter,BufRead,BufNewFile * silent! unmap if
-let g:coc_global_extensions = ['coc-python', 'coc-vimlsp', 'coc-json', 'coc-yank', 'coc-lists', 'coc-gitignore', 'coc-clangd', 'coc-ccls', 'coc-pairs', 'coc-snippets', 'coc-translator', 'coc-actions',  'coc-explorer']
+let g:coc_global_extensions = ['coc-python', 'coc-vimlsp', 'coc-json', 'coc-yank', 'coc-lists', 'coc-gitignore', 'coc-clangd', 'coc-ccls', 'coc-pairs', 'coc-snippets', 'coc-translator', 'coc-actions',  'coc-explorer', 'coc-vimtex']
 "set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 " use <tab> for trigger completion and navigate to the next complete item
 set updatetime=100
@@ -611,7 +624,7 @@ function! s:show_documentation()
   endif
 endfunction
 
-autocmd CursorHold * silent call CocActionAsync('highlight')
+autocmd CursorHold * silent! call CocActionAsync('highlight')
 
 function! s:cocActionsOpenFromSelected(type) abort
     execute 'CocCommand actions.open ' . a:type
@@ -763,18 +776,33 @@ let g:undotree_SetFocusWhenToggle = 1
 let g:undotree_ShortIndicators = 1
 
 
-" ==
-" == vim-multiple-cursor
-" ==
-"let g:multi_cursor_use_default_mapping=0
-"let g:multi_cursor_start_word_key      = '<c-k>'
-"let g:multi_cursor_select_all_word_key = '<a-k>'
-"let g:multi_cursor_start_key           = 'g<c-k>'
-"let g:multi_cursor_select_all_key      = 'g<a-k>'
-"let g:multi_cursor_next_key            = '<c-k>'
-"let g:multi_cursor_prev_key            = '<c-p>'
-"let g:multi_cursor_skip_key            = '<C-x>'
-"let g:multi_cursor_quit_key            = '<Esc>'
+" ===
+" === vimtex
+" ===
+let g:tex_flavor = 'latex'
+let g:vimtex_quickfix_mode = 0
+let g:vimtex_compiler_progname = 'nvr' " pip3 install neovim-remote
+let g:vimtex_view_general_viewer = 'zathura'
+let g:vimtex_view_method = 'zathura'
+" add following content into ~/.config/.zathrarc
+"# ~/.config/zathura/zathurarc
+"set synctex true
+"set synctex-editor-command "nvr --remote-silent %f -c %l"
+let g:vimtex_toc_config = {
+            \ 'name' : 'TOC',
+            \ 'layers' : ['content', 'todo', 'include'],
+            \ 'split_width' : 25,
+            \ 'todo_sorted' : 0,
+            \ 'show_help' : 1,
+            \ 'show_numbers' : 1,
+            \}
+
+" :h conceallevel
+set conceallevel=1
+set concealcursor=nc
+" let the conceal part not so dim
+highlight Conceal ctermbg=none ctermfg=none guibg=none guifg=none
+let g:tex_conceal='abdmg'
 
 
 " ==
