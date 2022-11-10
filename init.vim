@@ -65,6 +65,7 @@ set smartcase
 set shortmess+=c
 set inccommand=split
 
+
 set ttyfast "should make scrolling faster
 set lazyredraw "same as above
 set visualbell
@@ -399,15 +400,6 @@ let g:accelerated_jk_acceleration_table = [2, 4, 7, 15]
 " Auto Complete
 "Plug 'Valloric/YouCompleteMe'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-" Plug 'davidhalter/jedi-vim'
-"Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-"Plug 'ncm2/ncm2'
-"Plug 'ncm2/ncm2-jedi'
-"Plug 'ncm2/ncm2-github'
-"Plug 'ncm2/ncm2-bufword'
-"Plug 'ncm2/ncm2-path'
-"Plug 'ncm2/ncm2-match-highlight'
-"Plug 'ncm2/ncm2-markdown-subscope'
 
 " Undo Tree
 Plug 'mbbill/undotree/'
@@ -510,6 +502,7 @@ set termguicolors     " enable true colors support
 color molokai
 "colorscheme wal
 
+
 "color deus
 "let g:space_vim_transp_bg = 1
 "set background=dark
@@ -585,7 +578,7 @@ color molokai
 
 "let g:coc_node_path = '/usr/bin/node'
 silent! au BufEnter,BufRead,BufNewFile * silent! unmap if
-let g:coc_global_extensions = ['coc-python', 'coc-vimlsp', 'coc-json', 'coc-yank', 'coc-lists', 'coc-gitignore', 'coc-clangd', 'coc-ccls', 'coc-pairs', 'coc-snippets', 'coc-translator', 'coc-actions',  'coc-explorer', 'coc-vimtex']
+let g:coc_global_extensions = ['coc-python', 'coc-vimlsp', 'coc-json', 'coc-yank', 'coc-lists', 'coc-gitignore', 'coc-clangd', 'coc-ccls', 'coc-pairs', 'coc-snippets', 'coc-translator', 'coc-actions',  'coc-explorer', 'coc-vimtex', 'coc-lua']
 "set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 " use <tab> for trigger completion and navigate to the next complete item
 set updatetime=100
@@ -596,18 +589,43 @@ function! s:check_back_space() abort
     return !col || getline('.')[col - 1]	=~ '\s'
 endfunction
 
-inoremap <silent><expr> <Tab>
-            \ pumvisible() ? "\<C-n>" :
-            \ <SID>check_back_space() ? "\<Tab>" :
-            \ coc#refresh()
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+hi CocMenuSel ctermbg=237 guibg=#13354A  " highlight color of the selected term of the coc completion menu
+set pumblend=15  " make the coc completion menu semi-transparent
+"inoremap <silent><expr> <Tab>
+            "\ pumvisible() ? "\<C-n>" :
+            "\ <SID>check_back_space() ? "\<Tab>" :
+            "\ coc#refresh()
+"inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+
+" Use tab for trigger completion with characters ahead and navigate.
+" NOTE: There's always complete item selected by default, you may want to enable
+" no select by `"suggest.noselect": true` in your configuration file.
+" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+" other plugin before putting this into your config.
+inoremap <silent><expr> <TAB>
+      \ coc#pum#visible() ? coc#pum#next(1) :
+      \ coc#pum#visible() ? coc#_select_confirm() :
+      \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
+      \ CheckBackspace() ? "\<Tab>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
+
+" Make <CR> to accept selected completion item or notify coc.nvim to format
+" <C-g>u breaks current undo, please make your own choice.
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
 function! s:check_back_space() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
-inoremap <silent><expr> <c-space> coc#refresh()
+" Use <c-space> to trigger completion.
+if has('nvim')
+  inoremap <silent><expr> <c-space> coc#refresh()
+else
+  inoremap <silent><expr> <c-@> coc#refresh()
+endif
 
 inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
                               \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
@@ -781,9 +799,19 @@ let g:undotree_ShortIndicators = 1
 " ===
 let g:tex_flavor = 'latex'
 let g:vimtex_quickfix_mode = 0
+"使vimtex默认xelatex为编译器
+let g:vimtex_compiler_latexmk_engines = {'_':'-xelatex'}
+let g:vimtex_compiler_latexrun_engines ={'_':'xelatex'}
+
 let g:vimtex_compiler_progname = 'nvr' " pip3 install neovim-remote
-let g:vimtex_view_general_viewer = 'zathura'
-let g:vimtex_view_method = 'zathura'
+"let g:vimtex_view_general_viewer = 'zathura'
+"let g:vimtex_view_method = 'zathura'
+let g:vimtex_view_general_viewer = '/mnt/f/SumatraPDF/SumatraPDF.exe' "这里放置你的sumatrapdf 安装路径
+"let g:vimtex_view_general_options_latexmk = '-reuse-instance'
+let g:vimtex_view_general_options
+     \ = ' -reuse-instance -forward-search @tex @line @pdf'
+     \ . ' -inverse-search "' . 'cmd /c start /min \"\" '  . exepath(v:progpath)
+     \ . ' -v --not-a-term -T dumb -c  \"VimtexInverseSearch %l ''%f''\""' "for vim/gvim
 " add following content into ~/.config/.zathrarc
 "# ~/.config/zathura/zathurarc
 "set synctex true
@@ -798,11 +826,12 @@ let g:vimtex_toc_config = {
             \}
 
 " :h conceallevel
-set conceallevel=1
+set conceallevel=0
 set concealcursor=nc
 " let the conceal part not so dim
-highlight Conceal ctermbg=none ctermfg=none guibg=none guifg=none
+autocmd BufEnter *.* hi Conceal ctermbg=none ctermfg=lightgrey guibg=none guifg=lightgrey
 let g:tex_conceal='abdmg'
+
 
 
 " ==
@@ -844,4 +873,3 @@ let g:bullets_set_mappings = 0
 if has_machine_specific_file == 0
   exec "e ~/.config/nvim/_machine_specific.vim"
 endif
-
