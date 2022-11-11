@@ -28,14 +28,15 @@
 # https://castel.dev/post/lecture-notes-1/
 
 
-# Put this file into ~/.config/coc/ultisips
+
+# Put this file into ~/.config/coc/ultisnips/
 
 
 
 global !p
 def math():
 	return vim.eval('vimtex#syntax#in_mathzone()') == '1'
-def comment(): 
+def comment():
 	return vim.eval('vimtex#syntax#in_comment()') == '1'
 def env(name):
 	[x,y] = vim.eval("vimtex#env#is_inside('" + name + "')") 
@@ -323,6 +324,10 @@ endsnippet
 
 snippet lr[ "left[ right]" i
 \left[ ${1:${VISUAL}} \right] $0
+endsnippet
+
+snippet lrip "inner product" iA
+\langle ${1:${VISUAL}} \rangle$0
 endsnippet
 
 snippet lra "leftangle rightangle" iA
