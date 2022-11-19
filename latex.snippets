@@ -56,7 +56,13 @@ snippet template "Basic template" b
 \usepackage{hyperref}  % \href
 \usepackage{subcaption, wrapfig}  % \subfigure \wrapfig
 \usepackage{geometry}
-\usepackage{multirow}  % \multirow \multicolumn
+% \multirow{行数}{*}{内容}
+% \multicolumn
+\usepackage{multirow}
+% 半色调：\textcolor{<颜色>!<百分数>}
+% 混合色：\textcolor{<颜色>!<百分数>!<颜色>}
+% 互补色：\textcolor{-<颜色>}
+\usepackage[cmyk]{xcolor}
 
 % margin configuration
 \geometry{left=2.54cm, right=2.54cm, top=3.18cm, bottom=3.18cm}
@@ -376,6 +382,11 @@ endsnippet
 context "math()"
 snippet cb "^3" iA
 ^3
+endsnippet
+
+context "math()"
+snippet ''' "^'" iA
+^{\prime}
 endsnippet
 
 context "math()"
@@ -710,6 +721,22 @@ endsnippet
 
 snippet mbb "\mathbb" iA
 \mathbb{$1}$0
+endsnippet
+
+snippet mfk "\mathfrak" iA
+\mathfrak{$1}$0
+endsnippet
+
+snippet rm "{\rm }" iA
+{\rm $1}$0
+endsnippet
+
+snippet opn "operatorname" iA
+\operatorname{$1}$0
+endsnippet
+
+snippet TODO "TODO" iA
+\textcolor{magenta}{\textbf{TODO} : $1}$0
 endsnippet
 
 # vim:ft=snippets
