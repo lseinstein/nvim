@@ -473,6 +473,10 @@ let g:EasyMotion_do_mapping = 0
 let g:EasyMotion_smartcase = 1
 map <silent> r <Plug>(easymotion-overwin-f2)
 " tpye r ande then type two characters to locate the place you want to go to.
+"
+
+" deepL translation
+Plug 'ryicoh/deepl.vim'
 
 "Plug 'luochen1990/rainbow'
 "let g:rainbow_active = 1
@@ -859,6 +863,24 @@ nnoremap <silent> <LEADER>f :F  %<left><left>
 " === emmet
 " ===
 let g:user_emmet_leader_key='<C-f>'
+
+" ===
+" === deepL translation
+" ===
+let g:deepl#endpoint = "https://api-free.deepl.com/v2/translate"
+let g:deepl#auth_key = "00000000-0000-0000-0000-000000000000:fx"
+
+" replace a visual selection
+vmap <LEADER>de <Cmd>call deepl#v("EN")<CR>
+vmap <LEADER>dc <Cmd>call deepl#v("CN")<CR>
+
+" translate a current line and display on a new line
+nmap <LEADER>de yypV<Cmd>call deepl#v("EN")<CR>
+nmap <LEADER>dc yypV<Cmd>call deepl#v("CN")<CR>
+
+" specify the source language
+" translate from FR to EN
+"nmap t<C-e> yypV<Cmd>call deepl#v("EN", "FR")<CR>
 
 
 " ===
